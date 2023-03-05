@@ -19,6 +19,7 @@ public class StartActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
 
+        // Set up animation for StartActivity Views
         Animation appNameAnimation = AnimationUtils.loadAnimation(
                 this, R.anim.app_name_animation);
         Animation descriptionAnimation = AnimationUtils.loadAnimation(
@@ -31,6 +32,7 @@ public class StartActivity extends AppCompatActivity {
         Button loginButton = findViewById(R.id.login_button);
         Button registerButton = findViewById(R.id.register_button);
 
+        // Apply animations to Views
         appName.startAnimation(appNameAnimation);
         description.startAnimation(descriptionAnimation);
         loginButton.startAnimation(buttonsAnimation);
