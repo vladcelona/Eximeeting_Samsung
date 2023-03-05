@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -13,11 +14,15 @@ import android.widget.TextView;
 
 public class StartActivity extends AppCompatActivity {
 
+    private final String TAG = "StartActivity";
+
     @SuppressLint("UseCompatLoadingForDrawables")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
+
+        Log.i(TAG, "StartActivity started");
 
         // Set up animation for StartActivity Views
         Animation appNameAnimation = AnimationUtils.loadAnimation(
@@ -39,10 +44,12 @@ public class StartActivity extends AppCompatActivity {
         registerButton.startAnimation(buttonsAnimation);
 
         loginButton.setOnClickListener(view -> {
+            Log.i(TAG, "Starting new Intent: LoginActivity");
             startActivity(new Intent(StartActivity.this, LoginActivity.class));
         });
 
         registerButton.setOnClickListener(view -> {
+            Log.i(TAG, "Starting new Intent: RegisterActivity");
             startActivity(new Intent(StartActivity.this, RegisterActivity.class));
         });
     }
