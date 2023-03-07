@@ -89,28 +89,28 @@ public class RegisterActivity extends AppCompatActivity {
 
     // Here we apply the logic for creating account in Firebase database
     private void createAccount() {
-            firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(
-                    task -> {
-                        if (task.isSuccessful()) {
-                            User user = new User(fullName, email, companyName);
-                            FirebaseDatabase.getInstance().getReference("Users")
-                                    .child(Objects.requireNonNull(
-                                            FirebaseAuth.getInstance().getCurrentUser()).getUid())
-                                    .setValue(user).addOnCompleteListener(task1 -> {
-                                        if (task1.isSuccessful()) {
-                                            Toast.makeText(RegisterActivity.this,
-                                                    "You been registered successfully!",
-                                                    Toast.LENGTH_SHORT).show();
-                                        } else {
-                                            Toast.makeText(RegisterActivity.this,
-                                                    "Failed ot register. Try again!",
-                                                    Toast.LENGTH_SHORT).show();
-                                        }
-                                    });
-                        } else {
-                            Toast.makeText(RegisterActivity.this, "Failed to register",
-                                    Toast.LENGTH_SHORT).show();
-                        }
-                    });
+        firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(
+                task -> {
+                    if (task.isSuccessful()) {
+                        User user = new User(fullName, email, companyName);
+                        FirebaseDatabase.getInstance().getReference("Users")
+                                .child(Objects.requireNonNull(
+                                        FirebaseAuth.getInstance().getCurrentUser()).getUid())
+                                .setValue(user).addOnCompleteListener(task1 -> {
+                                    if (task1.isSuccessful()) {
+                                        Toast.makeText(RegisterActivity.this,
+                                                "You been registered successfully!",
+                                                Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        Toast.makeText(RegisterActivity.this,
+                                                "Failed ot register. Try again!",
+                                                Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                    } else {
+                        Toast.makeText(RegisterActivity.this, "Failed to register",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 }

@@ -70,6 +70,6 @@ public class LoginActivity extends AppCompatActivity {
                                 "Failed to login! Please check your credentials!",
                                 Toast.LENGTH_SHORT).show();
                     }
-        });
+                });
     }
 }
