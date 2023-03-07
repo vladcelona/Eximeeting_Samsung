@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -47,18 +48,26 @@ public class LoginActivity extends AppCompatActivity {
         String email = emailEditText.getText().toString().trim();
         String password = passwordEditText.getText().toString().trim();
 
-//        if (email.isEmpty()) {
-//            emailEditText.setError("Email is required!");
-//            emailEditText.requestFocus(); return;
-//        }
-//        if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-//            emailEditText.setError("Please provide valid email!");
-//            emailEditText.requestFocus(); return;
-//        }
-//        if (password.isEmpty()) {
-//            passwordEditText.setError("Password is required!");
-//            passwordEditText.requestFocus(); return;
-//        }
+        if (email.isEmpty()) {
+            emailEditText.setError("Email is required!");
+            emailEditText.requestFocus(); return;
+        } else {
+            emailEditText.setError(null); emailEditText.requestFocus();
+        }
+
+        if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            emailEditText.setError("Please provide valid email!");
+            emailEditText.requestFocus(); return;
+        } else {
+            emailEditText.setError(null); emailEditText.requestFocus();
+        }
+
+        if (password.isEmpty()) {
+            passwordEditText.setError("Password is required!");
+            passwordEditText.requestFocus(); return;
+        } else {
+            passwordEditText.setError(null); passwordEditText.requestFocus();
+        }
 
         firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(
                 task -> {

@@ -1,5 +1,6 @@
 package com.application.vladcelona.eximeeting_samsung;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
@@ -11,10 +12,25 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.Objects;
 
 public class StartActivity extends AppCompatActivity {
 
     private final String TAG = "StartActivity";
+    private TextView topText;
+    private FirebaseDatabase firebaseDatabase;
+    private DatabaseReference databaseReference;
 
     @SuppressLint("UseCompatLoadingForDrawables")
     @Override
@@ -23,6 +39,20 @@ public class StartActivity extends AppCompatActivity {
         setContentView(R.layout.activity_start);
 
         Log.i(TAG, "StartActivity started");
+
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        databaseReference = firebaseDatabase.getReference("Users");
+
+        // Check if the user has been logged in before
+        databaseReference.child(Objects.requireNonNull(
+                        FirebaseAuth.getInstance().getCurrentUser()).getUid())
+                .get().addOnCompleteListener(task -> {
+                    if (task.isSuccessful() && task.getResult().exists()) {
+                        Toast.makeText(StartActivity.this, "You have been logged in successfully",
+                                Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(StartActivity.this, MainActivity.class));
+                    }
+                });
 
         // Set up animation for StartActivity Views
         Animation appNameAnimation = AnimationUtils.loadAnimation(

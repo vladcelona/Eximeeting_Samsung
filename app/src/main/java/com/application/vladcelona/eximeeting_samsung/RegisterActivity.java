@@ -1,10 +1,15 @@
 package com.application.vladcelona.eximeeting_samsung;
 
+import static java.security.AccessController.getContext;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings.Secure;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
@@ -30,8 +35,9 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText fullNameEditText, emailEditText, companyNameEditText, passwordEditText;
 
     // Here we create necessary variables for creating account on Firebase
-    private String fullName, email, companyName, password;
+    private String deviceName, fullName, email, companyName, password;
 
+    @SuppressLint("HardwareIds")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,13 +50,14 @@ public class RegisterActivity extends AppCompatActivity {
         companyNameEditText = findViewById(R.id.company_name_edittext);
         passwordEditText = findViewById(R.id.password_edittext);
 
+        deviceName = Secure.getString(getContentResolver(), Secure.ANDROID_ID);
+        Log.i(TAG, "Devices name: " + deviceName);
+
         firebaseAuth = FirebaseAuth.getInstance();
 
         Button registerButton = findViewById(R.id.register_completed_button);
         registerButton.setOnClickListener(view -> {
             registerUser();
-            Log.i(TAG, "Creating new Intent: MainActivity");
-            startActivity(new Intent(RegisterActivity.this, MainActivity.class));
         });
     }
 
@@ -63,26 +70,40 @@ public class RegisterActivity extends AppCompatActivity {
         // Here we apply the case when Views are empty (which is not acceptable)
         // We ask user to enter their data
 
-//        if (fullName.isEmpty()) {
-//            fullNameEditText.setError("Full name is required!");
-//            fullNameEditText.requestFocus(); return;
-//        }
-//        if (email.isEmpty()) {
-//            emailEditText.setError("Email is required!");
-//            emailEditText.requestFocus(); return;
-//        }
-//        if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-//            emailEditText.setError("Please provide valid email!");
-//            emailEditText.requestFocus(); return;
-//        }
-//        if (companyName.isEmpty()) {
-//            companyNameEditText.setError("Company name is required!");
-//            companyNameEditText.requestFocus(); return;
-//        }
-//        if (password.isEmpty()) {
-//            passwordEditText.setError("Password is required!");
-//            passwordEditText.requestFocus(); return;
-//        }
+        if (fullName.isEmpty()) {
+            fullNameEditText.setError("Full name is required!");
+            fullNameEditText.requestFocus(); return;
+        } else {
+            fullNameEditText.setError(null); fullNameEditText.requestFocus();
+        }
+
+        if (email.isEmpty()) {
+            emailEditText.setError("Email is required!");
+            emailEditText.requestFocus(); return;
+        } else {
+            emailEditText.setError(null); emailEditText.requestFocus();
+        }
+
+        if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            emailEditText.setError("Please provide valid email!");
+            emailEditText.requestFocus(); return;
+        } else {
+            emailEditText.setError(null); emailEditText.requestFocus();
+        }
+
+        if (companyName.isEmpty()) {
+            companyNameEditText.setError("Company name is required!");
+            companyNameEditText.requestFocus(); return;
+        } else {
+            companyNameEditText.setError(null); companyNameEditText.requestFocus();
+        }
+
+        if (password.isEmpty()) {
+            passwordEditText.setError("Password is required!");
+            passwordEditText.requestFocus(); return;
+        } else {
+            passwordEditText.setError(null); passwordEditText.requestFocus();
+        }
 
         createAccount();
     }
@@ -101,6 +122,9 @@ public class RegisterActivity extends AppCompatActivity {
                                         Toast.makeText(RegisterActivity.this,
                                                 "You been registered successfully!",
                                                 Toast.LENGTH_SHORT).show();
+                                        Log.i(TAG, "Creating new Intent: MainActivity");
+                                        startActivity(new Intent(RegisterActivity.this,
+                                                MainActivity.class));
                                     } else {
                                         Toast.makeText(RegisterActivity.this,
                                                 "Failed ot register. Try again!",
