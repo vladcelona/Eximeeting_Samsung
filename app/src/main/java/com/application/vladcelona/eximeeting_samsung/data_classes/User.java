@@ -1,4 +1,4 @@
-package com.application.vladcelona.eximeeting_samsung;
+package com.application.vladcelona.eximeeting_samsung.data_classes;
 
 import java.io.Serializable;
 

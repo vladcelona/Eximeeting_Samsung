@@ -1,26 +1,18 @@
-package com.application.vladcelona.eximeeting_samsung;
-
-import static java.security.AccessController.getContext;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
+package com.application.vladcelona.eximeeting_samsung.login_register;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings.Secure;
 import android.util.Log;
 import android.util.Patterns;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.application.vladcelona.eximeeting_samsung.MainActivity;
+import com.application.vladcelona.eximeeting_samsung.data_classes.User;
+import com.application.vladcelona.eximeeting_samsung.databinding.ActivityRegisterBinding;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -29,80 +21,71 @@ import java.util.Objects;
 public class RegisterActivity extends AppCompatActivity {
 
     private final String TAG = "RegisterActivity";
-
     protected FirebaseAuth firebaseAuth;
-
-    private EditText fullNameEditText, emailEditText, companyNameEditText, passwordEditText;
+    private ActivityRegisterBinding binding;
 
     // Here we create necessary variables for creating account on Firebase
-    private String deviceName, fullName, email, companyName, password;
+    private String fullName, email, companyName, password;
 
     @SuppressLint("HardwareIds")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_register);
 
         Log.i(TAG, "RegisterActivity started");
+        binding = ActivityRegisterBinding.inflate(getLayoutInflater());
 
-        fullNameEditText = findViewById(R.id.full_name_edittext);
-        emailEditText = findViewById(R.id.email_edittext);
-        companyNameEditText = findViewById(R.id.company_name_edittext);
-        passwordEditText = findViewById(R.id.password_edittext);
-
-        deviceName = Secure.getString(getContentResolver(), Secure.ANDROID_ID);
+        String deviceName = Secure.getString(getContentResolver(), Secure.ANDROID_ID);
         Log.i(TAG, "Devices name: " + deviceName);
 
         firebaseAuth = FirebaseAuth.getInstance();
+        binding.registerCompletedButton.setOnClickListener(view -> registerUser());
 
-        Button registerButton = findViewById(R.id.register_completed_button);
-        registerButton.setOnClickListener(view -> {
-            registerUser();
-        });
+        setContentView(binding.getRoot());
     }
 
     private void registerUser() {
-        fullName = fullNameEditText.getText().toString().trim();
-        email = emailEditText.getText().toString().trim();
-        companyName = companyNameEditText.getText().toString().trim();
-        password = passwordEditText.getText().toString().trim();
+        fullName = Objects.requireNonNull(binding.fullNameEdittext.getText()).toString().trim();
+        email = Objects.requireNonNull(binding.emailEdittext.getText()).toString().trim();
+        companyName = Objects.requireNonNull(binding.companyNameEdittext.getText()).toString().trim();
+        password = Objects.requireNonNull(binding.passwordEdittext.getText()).toString().trim();
 
         // Here we apply the case when Views are empty (which is not acceptable)
         // We ask user to enter their data
 
         if (fullName.isEmpty()) {
-            fullNameEditText.setError("Full name is required!");
-            fullNameEditText.requestFocus(); return;
+            binding.fullNameEdittext.setError("Full name is required!");
+            binding.fullNameEdittext.requestFocus(); return;
         } else {
-            fullNameEditText.setError(null); fullNameEditText.requestFocus();
+            binding.fullNameEdittext.setError(null); binding.fullNameEdittext.requestFocus();
         }
 
         if (email.isEmpty()) {
-            emailEditText.setError("Email is required!");
-            emailEditText.requestFocus(); return;
+            binding.emailEdittext.setError("Email is required!");
+            binding.emailEdittext.requestFocus(); return;
         } else {
-            emailEditText.setError(null); emailEditText.requestFocus();
+            binding.emailEdittext.setError(null); binding.emailEdittext.requestFocus();
         }
 
         if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            emailEditText.setError("Please provide valid email!");
-            emailEditText.requestFocus(); return;
+            binding.emailEdittext.setError("Please provide valid email!");
+            binding.emailEdittext.requestFocus(); return;
         } else {
-            emailEditText.setError(null); emailEditText.requestFocus();
+            binding.emailEdittext.setError(null); binding.emailEdittext.requestFocus();
         }
 
         if (companyName.isEmpty()) {
-            companyNameEditText.setError("Company name is required!");
-            companyNameEditText.requestFocus(); return;
+            binding.companyNameEdittext.setError("Company name is required!");
+            binding.companyNameEdittext.requestFocus(); return;
         } else {
-            companyNameEditText.setError(null); companyNameEditText.requestFocus();
+            binding.companyNameEdittext.setError(null); binding.companyNameEdittext.requestFocus();
         }
 
         if (password.isEmpty()) {
-            passwordEditText.setError("Password is required!");
-            passwordEditText.requestFocus(); return;
+            binding.passwordEdittext.setError("Password is required!");
+            binding.passwordEdittext.requestFocus(); return;
         } else {
-            passwordEditText.setError(null); passwordEditText.requestFocus();
+            binding.passwordEdittext.setError(null); binding.passwordEdittext.requestFocus();
         }
 
         createAccount();
