@@ -36,7 +36,7 @@ public class RegisterActivity extends AppCompatActivity {
         binding = ActivityRegisterBinding.inflate(getLayoutInflater());
 
         String deviceName = Secure.getString(getContentResolver(), Secure.ANDROID_ID);
-        Log.i(TAG, "Devices name: " + deviceName);
+        Log.i(TAG, "Device name: " + deviceName);
 
         firebaseAuth = FirebaseAuth.getInstance();
         binding.registerCompletedButton.setOnClickListener(view -> registerUser());
